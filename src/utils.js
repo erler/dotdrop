@@ -9,3 +9,12 @@ export const stringHelpers = {
     return truncated;
   },
 };
+
+export const lookupResource = (resource, key, section) => {
+  let value;
+  if (resource && resource[key]) {
+    value =
+      section in resource[key] ? resource[key][section] : resource[key].default;
+  }
+  return value;
+};

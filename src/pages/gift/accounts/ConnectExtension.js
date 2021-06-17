@@ -3,6 +3,7 @@ import { Row, Col, Card } from 'react-bootstrap';
 import { useSubstrate, utils } from '../../../substrate-lib';
 import AccountSelector from '../../../components/account/AccountSelector';
 import CardHeader from '../../../components/CardHeader';
+import { lookupResource } from '../../../utils';
 
 export default function ExtensionAccount({
   setAccountHandler,
@@ -30,12 +31,26 @@ export default function ExtensionAccount({
     setAccountHandler && setAccountHandler(selectedAccount);
     setAddressHandler && setAddressHandler(selectedAccount?.address);
   };
+
+  const { theme } = useSubstrate();
+  const resources = {
+    accountType: {
+      default: 'Substrate',
+      polkadot: 'Polkadot',
+      kusama: 'Kusama',
+    },
+  };
+
   return (
     <>
       <Card.Body className="d-flex flex-column">
         <CardHeader
           title={title || 'Select Account'}
-          cardText={'Select your polkadot account below:'}
+          cardText={`Select your ${lookupResource(
+            resources,
+            'accountType',
+            theme
+          )} account below:`}
           backClickHandler={prevStepHandler}
         />
         <Row className="p-md-5 justify-content-center">

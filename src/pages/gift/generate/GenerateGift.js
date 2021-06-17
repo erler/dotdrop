@@ -4,14 +4,15 @@ import CardHeader from '../../../components/CardHeader';
 import { GenerateContext } from './GenerateMain';
 import { useSubstrate, utils } from '../../../substrate-lib';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import { lookupResource } from '../../../utils';
 import BN from 'bn.js';
+import { chain } from 'lodash';
 export default function GenerateGift({
   account,
   generateGiftHandler,
   giftFeeMultiplier,
 }) {
-  const { api, apiState, chainInfo } = useSubstrate();
+  const { api, apiState, chainInfo, theme } = useSubstrate();
 
   const { prevStep } = useContext(GenerateContext);
 
@@ -159,13 +160,27 @@ export default function GenerateGift({
     },
   });
 
+  const resources = {
+    title: {
+      default: `Gift ${chainInfo?.token}`,
+      polkadot: 'Gift DOTs',
+      kusama: 'Gift KSMs',
+    },
+    cardText: {
+      default: `Send ${chainInfo?.token} to your friends and familiy, and have them join the ${chainInfo?.chainName} Network today.`,
+      polkadot:
+        'Send DOTs to your friends and familiy, and have them join the Polkadot Network today.',
+      kusama:
+        'Send KSMs to your friends and familiy, and have them join the Kusama Network today.',
+    },
+  };
+
   return (
     <>
       <Card.Body className="d-flex flex-column">
         <CardHeader
-          title={'Gift Dots'}
-          cardText="Send DOTs to your friends and familiy, and have them join the
-            Polkadot Network today."
+          title={lookupResource(resources, 'title', theme)}
+          cardText={lookupResource(resources, 'cardText', theme)}
           backClickHandler={() => prevStep()}
         />
         <Row className="flex-column align-items-center">

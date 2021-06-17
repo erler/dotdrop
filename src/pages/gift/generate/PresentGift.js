@@ -1,21 +1,24 @@
 import { Row, Col, Card } from 'react-bootstrap';
 import CardHeader from '../../../components/CardHeader';
-import { Link } from 'react-router-dom';
-export default function PresentGift ({ gift, removeGiftHandler }) {
+import { useSubstrate, utils } from '../../../substrate-lib';
+import { lookupResource } from '../../../utils';
+
+export default function PresentGift({ gift, removeGiftHandler }) {
   const { email, amount, secret } = gift;
-  const mailSubject = 'Sending you some DOTs';
+  const { chainInfo, theme } = useSubstrate();
+  const mailSubject = `Sending you some ${chainInfo?.token}s`;
+  const amountStr = utils.formatBalance(amount, chainInfo?.token);
+  const claimLink = 'https://hamidra.github.io/dotdrop/#/claim';
   const mailBody = `
   Hey! \n 
-  I'm sending you ${
-    amount > 1 ? `${amount} DOTs` : `${amount} DOT`
-  } as a gift! You can go to \n
-  https://hamidra.github.io/dotdrop/#/claim \n
+  I'm sending you ${amountStr} as a gift! You can go to \n
+   \n ${claimLink}
   and type in the following secret message to claim your DOTs. 
   \n \n 
   ${secret} 
   \n \n 
   The website will walk you through to create your own secure
-  Polkadot account. \n 
+  ${chainInfo?.chainName} account. \n 
   Enjoy!`;
   const mailToLink = `${email}?subject=${mailSubject}&body=${encodeURIComponent(
     mailBody
@@ -29,13 +32,22 @@ export default function PresentGift ({ gift, removeGiftHandler }) {
     window.print();
   };
 
+  const resources = {
+    cardText: {
+      default: `Send ${chainInfo?.token} to your friends and familiy, and have them join the ${chainInfo?.chainName} Network today.`,
+      polkadot:
+        'Send DOTs to your friends and familiy, and have them join the Polkadot Network today.',
+      kusama:
+        'Send KSMs to your friends and familiy, and have them join the Kusama Network today.',
+    },
+  };
+
   return (
     <>
       <Card.Body>
         <CardHeader
           title={'Send Message'}
-          cardText="Send DOTs to your friends and familiy, and have them join the
-          Polkadot Network today."
+          cardText={lookupResource(resources, 'cardText', theme)}
         />
         <Row className="justify-content-center align-items-center my-4 mx-2">
           <Col>
@@ -60,7 +72,7 @@ export default function PresentGift ({ gift, removeGiftHandler }) {
                       padding: '5px',
                       marginTop: '20px',
                       marginBottom: '20px',
-                      borderRadius: '5px'
+                      borderRadius: '5px',
                     }}>
                     {secret}
                   </strong>

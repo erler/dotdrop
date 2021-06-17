@@ -2,7 +2,9 @@ import { useContext, useState } from 'react';
 import { Row, Col, Card, Form } from 'react-bootstrap';
 import { ClaimContext } from './ClaimMain';
 import CardHeader from '../../../components/CardHeader';
-export default function VerifySecret ({ claimGiftHandler }) {
+import { useSubstrate } from '../../../substrate-lib';
+import { lookupResource } from '../../../utils';
+export default function VerifySecret({ claimGiftHandler }) {
   const { prevStep } = useContext(ClaimContext);
   const [redeemSecret, setRedeemSecret] = useState('');
   const redeemHandler = () => {
@@ -12,13 +14,24 @@ export default function VerifySecret ({ claimGiftHandler }) {
       claimGiftHandler(redeemSecret);
     }
   };
+
+  const { theme } = useSubstrate();
+  const resources = {
+    cardText: {
+      default:
+        'Every account needs a minimum balance to be active on the network. Enter the secret hash you have received to claim your gift and fund your account.',
+      kusama:
+        'Every Kusama account needs a minimum balance to be active on the network. Enter the secret hash you have received to claim your gift and fund your account.',
+      polkadot:
+        'Every Polkadot account needs a minimum balance to be active on the network. Enter the secret hash you have received to claim your gift and fund your account.',
+    },
+  };
   return (
     <>
       <Card.Body className="d-flex flex-column">
         <CardHeader
           title={'Claim Your Gift'}
-          cardText="Every Polkadot account needs a minimum balance to be active on
-          the network. Enter the secret hash you have received to claim your gift and fund your account."
+          cardText={lookupResource(resources, 'cardText', theme)}
           backClickHandler={prevStep}
         />
         <Row className="pt-4 justify-content-center align-items-center">
@@ -41,7 +54,9 @@ export default function VerifySecret ({ claimGiftHandler }) {
         <div className="d-flex flex-grow-1" />
         <Row className=" pt-5 justify-content-center align-items-center">
           <Col className="d-flex justify-content-center">
-            <button className="btn btn-primary" onClick={() => redeemHandler()}>Claim Gift</button>
+            <button className="btn btn-primary" onClick={() => redeemHandler()}>
+              Claim Gift
+            </button>
           </Col>
         </Row>
       </Card.Body>

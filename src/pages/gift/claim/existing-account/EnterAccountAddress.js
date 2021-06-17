@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Row, Col, Card, Form } from 'react-bootstrap';
 import CardHeader from '../../../../components/CardHeader';
 import { useSubstrate, utils } from '../../../../substrate-lib';
+import { lookupResource } from '../../../../utils';
 
-export default function EnterAccountAddress ({
+export default function EnterAccountAddress({
   setAddressHandler,
-  prevStepHandler
+  prevStepHandler,
 }) {
   const { chainInfo } = useSubstrate();
 
@@ -24,12 +25,26 @@ export default function EnterAccountAddress ({
   const _setAddressHandler = () => {
     validate(address) && setAddressHandler(address);
   };
+
+  const { theme } = useSubstrate();
+  const resources = {
+    accountType: {
+      default: '',
+      polkadot: 'Polkadot',
+      kusama: 'Kusama',
+    },
+  };
+
   return (
     <>
       <Card.Body>
         <CardHeader
           title={'Account Address'}
-          cardText='Enter your existing Polkadot account address below'
+          cardText={`Enter your existing ${lookupResource(
+            resources,
+            'accountType',
+            theme
+          )} account address below`}
           backClickHandler={prevStepHandler}
         />
         <Row
@@ -50,9 +65,7 @@ export default function EnterAccountAddress ({
                   value={address}
                 />
                 {addressError && (
-                  <Form.Text className="text-danger">
-                    {addressError}
-                  </Form.Text>
+                  <Form.Text className="text-danger">{addressError}</Form.Text>
                 )}
               </Form.Group>
             </Form>
@@ -61,7 +74,11 @@ export default function EnterAccountAddress ({
         <div className="flex-grow-1" />
         <Row>
           <Col className="d-flex justify-content-center">
-            <button className="btn btn-primary" onClick={() => _setAddressHandler()}>Claim Gift</button>
+            <button
+              className="btn btn-primary"
+              onClick={() => _setAddressHandler()}>
+              Claim Gift
+            </button>
           </Col>
         </Row>
       </Card.Body>
