@@ -37,7 +37,7 @@ const WalletInfoField = ({ title, subtitle, ...props }) => {
   } else if (title === 'Parity Signer') {
     logo = signerLogo;
     href = 'https://www.parity.io/technologies/signer/';
-  } else if (title === 'Hardware Wallet') {
+  } else if (title === 'Ledger') {
     logo = ledgerLogo;
     href = 'https://support.ledger.com/hc/en-us/articles/360016289919-Polkadot-DOT';
   }
@@ -98,23 +98,29 @@ export default function AccountOverview () {
     <>
       <Header />
       <Container>
-        <Row className="p-3 py-sm-5">
-          <Col className="d-flex justify-content-center">
+        <Row className="flex-grow-1 p-3 py-sm-5">
+          <Col className="justify-content-center">
             <Card
               style={{ width: 920, maxWidth: '100%', minHeight: 450 }}
-              className="shadow mb-5 m-sm-0">
-              <Card.Header
+              className="d-flex shadow p-2 mb-5 m-sm-0">
+              {/* <Card.Header
                 className="bg-transparent border-0"
                 style={{ padding: '2rem 2rem 0 2rem' }}>
                 <h3 className="font-weight-bold text-center text-sm-left">
                   Account Details
                 </h3>
-              </Card.Header>
-              <Card.Body>
-                <Row className="pb-2">
-                  <Col className="mx-2 mb-5 mb-md-0">
+              </Card.Header> */}
+              <Card.Body className="d-flex">
+                <Row className="pb-2 flex-grow-1">
+                  <Col className="d-flex flex-column mx-2 mb-5 mb-md-0">
+                    <div className="pb-3">
+                      <h3 className="font-weight-bold text-center text-sm-left">
+                        Address Details
+                      </h3>
+                      <p class="text-secondary">This is your public {giftTheme.network === 'Polkadot' ? 'Polkadot' : 'Kusama'} address, which is safe to share with anyone.</p>
+                    </div>
                     <AccountField
-                      title="Account Address"
+                      title={`${giftTheme.network === 'Polkadot' ? 'Polkadot' : 'Kusama'} Address`}
                       value={`${accountAddress &&
                         utils.validateAddress(
                           accountAddress,
@@ -135,7 +141,7 @@ export default function AccountOverview () {
                         )} ${chainInfo?.token}`
                       }
                     />
-                    <AccountField
+                    {/* <AccountField
                       title="Balance (Reserved)"
                       value={
                         balance?.reserved &&
@@ -145,9 +151,10 @@ export default function AccountOverview () {
                           balanceDecimalPoints
                         )} ${chainInfo?.token}`
                       }
-                    />
-                    <div className="mt-4">
-                      <a href={`https://polkascan.io/polkadot/account/${accountAddress}`} target="_blank" rel="noreferrer">
+                    /> */}
+                    <div className="flex-grow-1" />
+                    <div className="mb-1">
+                      <a className="small" href={`https://polkascan.io/polkadot/account/${accountAddress}`} target="_blank" rel="noreferrer">
                         {'→ See account on Polkascan'}
                       </a>
                     </div>
@@ -156,10 +163,10 @@ export default function AccountOverview () {
                     className="mx-2 d-none d-sm-flex"
                     style={giftTheme.network === 'Polkadot' ? { backgroundColor: '#D5DBE0', width: '1px' } : { backgroundColor: '#333', width: '1px' }}
                   />
-                  <Col className="d-flex flex-column mx-2 align-items-start justify-content-center">
-                    <div>
+                  <Col className="d-flex flex-column mx-2 align-items-start justify-content-start">
+                    <div className="py-2">
                       <h4>{giftTheme.content} Wallets</h4>
-                      <p class="text-secondary">Import your account to one of the following wallets:</p>
+                      <p class="text-secondary small">Import your address to one of the following wallets using your seed phrase:</p>
                     </div>
                     <div className="w-100 py-2">
                       <WalletInfoField
@@ -175,8 +182,8 @@ export default function AccountOverview () {
                     </div>
                     <div className="w-100 py-2">
                       <WalletInfoField
-                        title="Hardware Wallet"
-                        subtitle="Secure offline wallet"
+                        title="Ledger"
+                        subtitle="Hardware wallet"
                       />
                     </div>
                   </Col>
