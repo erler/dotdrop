@@ -98,8 +98,8 @@ export default function AccountOverview () {
     <>
       <Header />
       <Container>
-        <Row className="flex-grow-1 p-3 py-sm-5">
-          <Col className="justify-content-center">
+        <Row className="p-3 py-sm-5">
+          <Col className="d-flex justify-content-center">
             <Card
               style={{ width: 920, maxWidth: '100%', minHeight: 450 }}
               className="d-flex shadow p-2 mb-5 m-sm-0">
